@@ -1,0 +1,116 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h2>{{ config.title }}</h2>
+
+    <form [formGroup]="authForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <!-- Success Message -->
+      @if (successMessage) {
+      <div class="alert alert-success">
+        {{ successMessage }}
+      </div>
+      }
+
+      <!-- Error Message -->
+      @if (errorMessage) {
+      <div class="alert alert-error">
+        {{ errorMessage }}
+      </div>
+      }
+
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          class="form-control"
+          [class.error]="email?.invalid && email?.touched"
+          placeholder="Enter your email"
+        />
+        @if (email?.invalid && email?.touched) {
+        <div class="error-message">
+          @if (email?.errors?.['required']) {
+          <span>Email is required</span>
+          } @if (email?.errors?.['email']) {
+          <span>Please enter a valid email address</span>
+          }
+        </div>
+        }
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          class="form-control"
+          [class.error]="password?.invalid && password?.touched"
+          placeholder="Enter your password"
+        />
+        @if (password?.invalid && password?.touched) {
+        <div class="error-message">
+          @if (password?.errors?.['required']) {
+          <span>Password is required</span>
+          } @if (password?.errors?.['minlength']) {
+          <span>Password must be at least 6 characters long</span>
+          }
+        </div>
+        }
+      </div>
+
+      <!-- Confirm Password Field (only for registration) -->
+      @if (config.showConfirmPassword) {
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          formControlName="confirmPassword"
+          class="form-control"
+          [class.error]="(confirmPassword?.invalid && confirmPassword?.touched) || (authForm.errors?.['passwordMismatch'] && confirmPassword?.touched)"
+          placeholder="Confirm your password"
+        />
+        @if (confirmPassword?.invalid && confirmPassword?.touched) {
+        <div class="error-message">
+          @if (confirmPassword?.errors?.['required']) {
+          <span>Password confirmation is required</span>
+          }
+        </div>
+        } @if (authForm.errors?.['passwordMismatch'] &&
+        confirmPassword?.touched) {
+        <div class="error-message">
+          <span>Passwords do not match</span>
+        </div>
+        }
+      </div>
+      }
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="btn-primary"
+        [disabled]="authForm.invalid || isSubmitting"
+      >
+        @if (isSubmitting) {
+        <span>{{ config.submitButtonLoadingText }}</span>
+        } @else {
+        <span>{{ config.submitButtonText }}</span>
+        }
+      </button>
+
+      <!-- Switch Mode Link -->
+      @if (config.showSwitchLink && config.switchLinkText &&
+      config.switchLinkLabel) {
+      <div class="switch-mode">
+        <span>{{ config.switchLinkLabel }}</span>
+        <button type="button" class="link-button" (click)="onSwitchMode()">
+          {{ config.switchLinkText }}
+        </button>
+      </div>
+      }
+    </form>
+  </div>
+</div>
