@@ -1,0 +1,33 @@
+<header class="app-header">
+  <div class="header-container">
+    <div class="header-brand">
+      <h1 class="brand-title" (click)="goHome()">SMS Client</h1>
+    </div>
+
+    <nav class="header-nav">
+      @if (isAuthenticated) {
+      <div class="nav-items">
+        <span class="welcome-text">Welcome back!</span>
+        <button class="nav-btn primary" (click)="goToDashboard()">
+          <span class="btn-icon">📊</span>
+          Dashboard
+        </button>
+        <button class="nav-btn secondary" (click)="logout()">
+          <span class="btn-icon">🚪</span>
+          Sign Out
+        </button>
+      </div>
+      } @else {
+      <div class="nav-items">
+        @if (currentRoute !== '/signin') {
+        <button class="nav-btn outline" (click)="goToSignIn()">Sign In</button>
+        } @if (currentRoute !== '/register') {
+        <button class="nav-btn primary" (click)="goToRegister()">
+          Register
+        </button>
+        }
+      </div>
+      }
+    </nav>
+  </div>
+</header>

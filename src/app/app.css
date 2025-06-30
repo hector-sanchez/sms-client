@@ -1,0 +1,12 @@
+.main-content {
+  min-height: calc(100vh - 4rem); /* Account for header height */
+  background: #f8fafc;
+  padding: 2rem 1rem;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    min-height: calc(100vh - 3.5rem); /* Account for smaller header on mobile */
+    padding: 1.5rem 0.75rem;
+  }
+}

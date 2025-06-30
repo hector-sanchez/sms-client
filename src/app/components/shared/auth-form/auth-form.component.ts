@@ -7,6 +7,8 @@ import {
   Validators,
   AbstractControl,
 } from '@angular/forms';
+import { AuthService } from '../../../services/auth.service';
+import { Router } from '@angular/router';
 
 export interface AuthFormData {
   email: string;
@@ -29,7 +31,7 @@ export interface AuthFormConfig {
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './auth-form.component.html',
-  styleUrl: './auth-form.component.css'
+  styleUrl: './auth-form.component.css',
 })
 export class AuthFormComponent implements OnInit, OnChanges {
   @Input() config!: AuthFormConfig;
@@ -41,16 +43,22 @@ export class AuthFormComponent implements OnInit, OnChanges {
   @Output() switchMode = new EventEmitter<void>();
 
   authForm: FormGroup;
+  isAuthenticated = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.authForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['']
+      confirmPassword: [''],
     });
   }
 
   ngOnInit() {
+    this.checkAuthStatus();
     this.updateFormValidation();
   }
 
@@ -58,9 +66,13 @@ export class AuthFormComponent implements OnInit, OnChanges {
     this.updateFormValidation();
   }
 
+  private checkAuthStatus() {
+    this.isAuthenticated = this.authService.isAuthenticated();
+  }
+
   private updateFormValidation() {
     const confirmPasswordControl = this.authForm.get('confirmPassword');
-    
+
     if (this.config?.showConfirmPassword) {
       confirmPasswordControl?.setValidators([Validators.required]);
       this.authForm.setValidators(this.passwordMatchValidator);
@@ -68,37 +80,47 @@ export class AuthFormComponent implements OnInit, OnChanges {
       confirmPasswordControl?.clearValidators();
       this.authForm.clearValidators();
     }
-    
+
     confirmPasswordControl?.updateValueAndValidity();
     this.authForm.updateValueAndValidity();
   }
 
-  passwordMatchValidator(control: AbstractControl): { [key: string]: boolean } | null {
+  passwordMatchValidator(
+    control: AbstractControl
+  ): { [key: string]: boolean } | null {
     const password = control.get('password');
     const confirmPassword = control.get('confirmPassword');
-    
+
     if (!password || !confirmPassword) {
       return null;
     }
-    
-    return password.value === confirmPassword.value ? null : { 'passwordMismatch': true };
+
+    return password.value === confirmPassword.value
+      ? null
+      : { passwordMismatch: true };
   }
 
-  get email() { return this.authForm.get('email'); }
-  get password() { return this.authForm.get('password'); }
-  get confirmPassword() { return this.authForm.get('confirmPassword'); }
+  get email() {
+    return this.authForm.get('email');
+  }
+  get password() {
+    return this.authForm.get('password');
+  }
+  get confirmPassword() {
+    return this.authForm.get('confirmPassword');
+  }
 
   onSubmit() {
     if (this.authForm.valid) {
       const formData: AuthFormData = {
         email: this.authForm.value.email,
-        password: this.authForm.value.password
+        password: this.authForm.value.password,
       };
-      
+
       if (this.config.showConfirmPassword) {
         formData.confirmPassword = this.authForm.value.confirmPassword;
       }
-      
+
       this.formSubmit.emit(formData);
     }
   }
@@ -109,5 +131,15 @@ export class AuthFormComponent implements OnInit, OnChanges {
 
   resetForm() {
     this.authForm.reset();
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/signin']);
+    this.checkAuthStatus(); // Refresh the auth status
+  }
+
+  goToDashboard() {
+    this.router.navigate(['/dashboard']);
   }
 }

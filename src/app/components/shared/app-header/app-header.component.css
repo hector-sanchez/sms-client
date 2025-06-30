@@ -1,0 +1,143 @@
+.app-header {
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 4rem;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+}
+
+.brand-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #667eea;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.brand-title:hover {
+  color: #5a67d8;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+}
+
+.nav-items {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.welcome-text {
+  color: #4a5568;
+  font-weight: 500;
+  margin-right: 0.5rem;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav-btn.primary {
+  background: #667eea;
+  color: white;
+}
+
+.nav-btn.primary:hover {
+  background: #5a67d8;
+}
+
+.nav-btn.secondary {
+  background: #f8f9fa;
+  color: #6c757d;
+  border: 1px solid #dee2e6;
+}
+
+.nav-btn.secondary:hover {
+  background: #e9ecef;
+  color: #495057;
+}
+
+.nav-btn.outline {
+  background: transparent;
+  color: #667eea;
+  border: 1px solid #667eea;
+}
+
+.nav-btn.outline:hover {
+  background: #667eea;
+  color: white;
+}
+
+.btn-icon {
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .header-container {
+    padding: 0 0.75rem;
+    height: 3.5rem;
+  }
+
+  .brand-title {
+    font-size: 1.25rem;
+  }
+
+  .nav-items {
+    gap: 0.5rem;
+  }
+
+  .nav-btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .welcome-text {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-btn .btn-icon {
+    margin-right: 0;
+  }
+
+  .nav-btn span:not(.btn-icon) {
+    display: none;
+  }
+
+  .nav-btn {
+    padding: 0.5rem;
+    min-width: 2.5rem;
+    justify-content: center;
+  }
+}
