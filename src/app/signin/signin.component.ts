@@ -3,14 +3,10 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import {
-  AuthFormComponent,
-  AuthFormData,
-  AuthFormConfig,
-} from '../components/shared/auth-form/auth-form.component';
+import { AuthFormComponent, AuthFormData, AuthFormConfig } from '../components/shared/auth-form/auth-form.component';
 
 @Component({
-  selector: 'app-register',
+  selector: 'app-signin',
   standalone: true,
   imports: [CommonModule, AuthFormComponent],
   template: `
@@ -20,24 +16,23 @@ import {
       [errorMessage]="errorMessage"
       [successMessage]="successMessage"
       (formSubmit)="onFormSubmit($event)"
-      (switchMode)="onSwitchToSignIn()"
-    >
+      (switchMode)="onSwitchToRegister()">
     </app-auth-form>
-  `,
+  `
 })
-export class RegisterComponent {
+export class SignInComponent {
   isSubmitting = false;
   errorMessage = '';
   successMessage = '';
 
   formConfig: AuthFormConfig = {
-    title: 'Create Account',
-    submitButtonText: 'Create Account',
-    submitButtonLoadingText: 'Creating Account...',
-    showConfirmPassword: true,
+    title: 'Sign In',
+    submitButtonText: 'Sign In',
+    submitButtonLoadingText: 'Signing In...',
+    showConfirmPassword: false,
     showSwitchLink: true,
-    switchLinkLabel: 'Already have an account?',
-    switchLinkText: 'Sign In',
+    switchLinkLabel: "Don't have an account?",
+    switchLinkText: 'Register'
   };
 
   constructor(
@@ -59,56 +54,59 @@ export class RegisterComponent {
       Accept: 'application/json',
     });
 
+    // Assuming your Rails backend has a sign-in endpoint at /auth/signin or /sessions
     this.http
       .post<{
         token?: string;
         jwt?: string;
         access_token?: string;
         user?: any;
-      }>('http://localhost:3000/users', { email, password }, { headers })
+      }>('http://localhost:3000/auths', { email, password }, { headers })
       .subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          console.log('Registration response:', response);
+          console.log('Sign-in response:', response);
 
-          const token = response.token;
+          const token = response.token || response.jwt || response.access_token;
 
           if (token) {
             // Store the JWT token
             this.authService.setToken(token);
-            this.successMessage =
-              'Registration successful! You are now logged in.';
+            this.successMessage = 'Sign-in successful! Welcome back.';
 
-            // Redirect to dashboard or home page after successful registration and auto-login
+            // Redirect to dashboard after successful sign-in
             setTimeout(() => {
               this.router.navigate(['/dashboard']);
-            }, 2000);
+            }, 1500);
           } else {
-            this.successMessage = 'Registration successful!';
+            this.errorMessage = 'Sign-in successful but no token received.';
             console.warn('No token received in response:', response);
           }
         },
         error: (error) => {
           this.isSubmitting = false;
-          console.error('Registration error:', error);
+          console.error('Sign-in error:', error);
 
-          // Handle network errors
+          // Handle different error scenarios
           if (error.status === 0) {
             this.errorMessage =
               'Network error: Please check if the server is running and CORS is configured properly.';
+          } else if (error.status === 401) {
+            this.errorMessage = 'Invalid email or password. Please try again.';
           } else if (error.status === 422) {
             this.errorMessage =
               error.error?.message ||
               'Validation error. Please check your input.';
           } else {
             this.errorMessage =
-              error.error?.message || 'Registration failed. Please try again.';
+              error.error?.message ||
+              'Sign-in failed. Please try again.';
           }
         },
       });
   }
 
-  onSwitchToSignIn() {
-    this.router.navigate(['/signin']);
+  onSwitchToRegister() {
+    this.router.navigate(['/register']);
   }
 }

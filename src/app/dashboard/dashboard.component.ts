@@ -105,14 +105,14 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.isAuthenticated = this.authService.isAuthenticated();
     
-    // If not authenticated, redirect to register
+    // If not authenticated, redirect to sign-in
     if (!this.isAuthenticated) {
-      this.router.navigate(['/register']);
+      this.router.navigate(['/signin']);
     }
   }
 
   logout() {
     this.authService.logout();
-    this.router.navigate(['/register']);
+    this.router.navigate(['/signin']);
   }
 }
