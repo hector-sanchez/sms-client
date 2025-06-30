@@ -1,0 +1,103 @@
+<div class="register-container">
+  <div class="register-card">
+    <h2>Create Account</h2>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+
+      <!-- Success Message -->
+      @if (successMessage) {
+        <div class="alert alert-success">
+          {{ successMessage }}
+        </div>
+      }
+
+      <!-- Error Message -->
+      @if (errorMessage) {
+        <div class="alert alert-error">
+          {{ errorMessage }}
+        </div>
+      }
+
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          class="form-control"
+          [class.error]="email?.invalid && email?.touched"
+          placeholder="Enter your email">
+        @if (email?.invalid && email?.touched) {
+          <div class="error-message">
+            @if (email?.errors?.['required']) {
+              <span>Email is required</span>
+            }
+            @if (email?.errors?.['email']) {
+              <span>Please enter a valid email address</span>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          class="form-control"
+          [class.error]="password?.invalid && password?.touched"
+          placeholder="Enter your password">
+        @if (password?.invalid && password?.touched) {
+          <div class="error-message">
+            @if (password?.errors?.['required']) {
+              <span>Password is required</span>
+            }
+            @if (password?.errors?.['minlength']) {
+              <span>Password must be at least 6 characters long</span>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Confirm Password Field -->
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          formControlName="confirmPassword"
+          class="form-control"
+          [class.error]="(confirmPassword?.invalid && confirmPassword?.touched) || (registerForm.errors?.['passwordMismatch'] && confirmPassword?.touched)"
+          placeholder="Confirm your password">
+        @if (confirmPassword?.invalid && confirmPassword?.touched) {
+          <div class="error-message">
+            @if (confirmPassword?.errors?.['required']) {
+              <span>Password confirmation is required</span>
+            }
+          </div>
+        }
+        @if (registerForm.errors?.['passwordMismatch'] && confirmPassword?.touched) {
+          <div class="error-message">
+            <span>Passwords do not match</span>
+          </div>
+        }
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="btn-primary"
+        [disabled]="registerForm.invalid || isSubmitting">
+        @if (isSubmitting) {
+          <span>Creating Account...</span>
+        } @else {
+          <span>Create Account</span>
+        }
+      </button>
+
+    </form>
+  </div>
+</div>
