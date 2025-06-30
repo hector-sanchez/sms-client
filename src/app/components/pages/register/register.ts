@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 import {
   AuthFormComponent,
   AuthFormData,
   AuthFormConfig,
-} from '../components/shared/auth-form/auth-form.component';
+} from '../../shared/auth-form/auth-form';
 
 @Component({
   selector: 'app-register',

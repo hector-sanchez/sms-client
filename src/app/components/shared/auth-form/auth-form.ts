@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnInit,
+  OnChanges,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
@@ -30,8 +37,8 @@ export interface AuthFormConfig {
   selector: 'app-auth-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './auth-form.component.html',
-  styleUrl: './auth-form.component.css',
+  templateUrl: './auth-form.html',
+  styleUrl: './auth-form.css',
 })
 export class AuthFormComponent implements OnInit, OnChanges {
   @Input() config!: AuthFormConfig;

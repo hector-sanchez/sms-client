@@ -2,8 +2,12 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
-import { AuthFormComponent, AuthFormData, AuthFormConfig } from '../components/shared/auth-form/auth-form.component';
+import { AuthService } from '../../../services/auth.service';
+import {
+  AuthFormComponent,
+  AuthFormData,
+  AuthFormConfig,
+} from '../../shared/auth-form/auth-form';
 
 @Component({
   selector: 'app-signin',
@@ -16,9 +20,10 @@ import { AuthFormComponent, AuthFormData, AuthFormConfig } from '../components/s
       [errorMessage]="errorMessage"
       [successMessage]="successMessage"
       (formSubmit)="onFormSubmit($event)"
-      (switchMode)="onSwitchToRegister()">
+      (switchMode)="onSwitchToRegister()"
+    >
     </app-auth-form>
-  `
+  `,
 })
 export class SignInComponent {
   isSubmitting = false;
@@ -32,7 +37,7 @@ export class SignInComponent {
     showConfirmPassword: false,
     showSwitchLink: true,
     switchLinkLabel: "Don't have an account?",
-    switchLinkText: 'Register'
+    switchLinkText: 'Register',
   };
 
   constructor(
@@ -99,8 +104,7 @@ export class SignInComponent {
               'Validation error. Please check your input.';
           } else {
             this.errorMessage =
-              error.error?.message ||
-              'Sign-in failed. Please try again.';
+              error.error?.message || 'Sign-in failed. Please try again.';
           }
         },
       });

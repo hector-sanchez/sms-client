@@ -9,8 +9,8 @@ import { filter } from 'rxjs/operators';
   selector: 'app-header',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './app-header.component.html',
-  styleUrl: './app-header.component.css',
+  templateUrl: './app-header.html',
+  styleUrl: './app-header.css',
 })
 export class AppHeaderComponent implements OnInit, OnDestroy {
   isAuthenticated = false;
