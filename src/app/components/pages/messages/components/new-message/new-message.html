@@ -1,0 +1,91 @@
+<div class="new-message-form">
+  <h3>New Message</h3>
+
+  <form [formGroup]="messageForm" (ngSubmit)="onSubmit()" class="message-form">
+    <!-- Phone Number Input -->
+    <div class="form-group">
+      <label for="phoneNumber">Phone Number</label>
+      <input
+        type="tel"
+        id="phoneNumber"
+        formControlName="phoneNumber"
+        class="form-input"
+        placeholder="+1234567890"
+        [class.error]="
+          messageForm.get('phoneNumber')?.invalid &&
+          messageForm.get('phoneNumber')?.touched
+        "
+      />
+      <div
+        class="error-message"
+        *ngIf="
+          messageForm.get('phoneNumber')?.invalid &&
+          messageForm.get('phoneNumber')?.touched
+        "
+      >
+        <span *ngIf="messageForm.get('phoneNumber')?.errors?.['required']"
+          >Phone number is required</span
+        >
+        <span *ngIf="messageForm.get('phoneNumber')?.errors?.['pattern']"
+          >Please enter a valid phone number</span
+        >
+      </div>
+    </div>
+
+    <!-- Message Body Textarea -->
+    <div class="form-group">
+      <label for="messageBody">Message</label>
+      <textarea
+        id="messageBody"
+        formControlName="messageBody"
+        class="form-textarea"
+        placeholder="Type your message here..."
+        maxlength="250"
+        rows="4"
+        [class.error]="
+          messageForm.get('messageBody')?.invalid &&
+          messageForm.get('messageBody')?.touched
+        "
+        (input)="updateCharacterCount()"
+      ></textarea>
+      <div
+        class="error-message"
+        *ngIf="
+          messageForm.get('messageBody')?.invalid &&
+          messageForm.get('messageBody')?.touched
+        "
+      >
+        <span *ngIf="messageForm.get('messageBody')?.errors?.['required']"
+          >Message is required</span
+        >
+      </div>
+    </div>
+
+    <!-- Character Counter -->
+    <div class="character-counter">
+      {{ characterCount }}/{{ getMaxMessageLength() }}
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="clearForm()">
+        Cancel
+      </button>
+      <button
+        type="submit"
+        class="btn-submit"
+        [disabled]="messageForm.invalid || isSubmitting"
+      >
+        {{ isSubmitting ? "Sending..." : "Send Message" }}
+      </button>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div class="form-message success" *ngIf="successMessage">
+      {{ successMessage }}
+    </div>
+    <div class="form-message error" *ngIf="formErrorMessage">
+      {{ formErrorMessage }}
+    </div>
+  </form>
+</div>

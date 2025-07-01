@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { AppConstants, getAuthHeader } from '../../../constants/app-constants';
+import { NewMessageComponent } from './components/new-message/new-message';
 
 export interface Message {
   id: number;
@@ -18,7 +19,7 @@ export interface Message {
 @Component({
   selector: 'app-messages',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NewMessageComponent],
   templateUrl: './messages.html',
   styleUrl: './messages.css',
 })
@@ -207,5 +208,11 @@ export class MessagesComponent implements OnInit {
 
   getMaxMessageLength(): number {
     return AppConstants.APP_SETTINGS.MAX_MESSAGE_LENGTH;
+  }
+
+  // Handler for when a message is sent from the new-message component
+  onMessageSent(): void {
+    // Refresh messages to show the new message
+    this.loadMessages();
   }
 }

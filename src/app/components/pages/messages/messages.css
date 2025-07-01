@@ -12,13 +12,32 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
+/* Two-column layout */
+.messages-layout {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 32px;
+  min-height: 600px;
+}
+
+/* New Message Form Section */
+.new-message-section {
+  border-right: 1px solid #e0e0e0;
+  padding-right: 32px;
+}
+
+/* Messages Section */
+.messages-section {
+  padding-left: 0;
+}
+
 .messages-header {
   margin-bottom: 24px;
 }
 
 .messages-header h2 {
   color: #000;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   margin: 0;
 }
@@ -206,6 +225,19 @@
     padding: 20px;
   }
 
+  /* Stack columns on mobile */
+  .messages-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .new-message-section {
+    border-right: none;
+    border-bottom: 1px solid #e0e0e0;
+    padding-right: 0;
+    padding-bottom: 24px;
+  }
+
   .messages-list {
     gap: 20px;
   }
@@ -236,8 +268,16 @@
     padding: 16px;
   }
 
+  .messages-layout {
+    gap: 20px;
+  }
+
+  .new-message-section {
+    padding-bottom: 20px;
+  }
+
   .messages-header h2 {
-    font-size: 20px;
+    font-size: 16px;
   }
 
   .message-content {

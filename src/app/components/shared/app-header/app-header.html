@@ -7,11 +7,6 @@
     <nav class="header-nav">
       @if (isAuthenticated) {
       <div class="nav-items">
-        <span class="welcome-text">Welcome back!</span>
-        <button class="nav-btn outline" (click)="goToMessages()">
-          <span class="btn-icon">📱</span>
-          My Messages
-        </button>
         <button class="nav-btn secondary" (click)="logout()">
           <span class="btn-icon">🚪</span>
           Sign Out
