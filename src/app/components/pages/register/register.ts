@@ -69,28 +69,32 @@ export class RegisterComponent {
       .subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          console.log('Registration response:', response);
 
           const token = response.token;
 
           if (token) {
-            // Store the JWT token
-            this.authService.setToken(token);
-            this.successMessage =
-              'Registration successful! You are now logged in.';
+            // Store and validate the JWT token
+            const tokenValid = this.authService.setToken(token);
 
-            // Redirect to dashboard or home page after successful registration and auto-login
-            setTimeout(() => {
-              this.router.navigate(['/dashboard']);
-            }, 2000);
+            if (tokenValid) {
+              this.successMessage =
+                'Registration successful! You are now logged in.';
+
+              // Redirect to dashboard after successful registration and auto-login
+              setTimeout(() => {
+                this.router.navigate(['/dashboard']);
+              }, 2000);
+            } else {
+              this.errorMessage =
+                'Registration successful, but received an invalid authentication token. Please try signing in.';
+            }
           } else {
-            this.successMessage = 'Registration successful!';
-            console.warn('No token received in response:', response);
+            this.errorMessage =
+              'Registration successful, but no authentication token was received. Please try signing in.';
           }
         },
         error: (error) => {
           this.isSubmitting = false;
-          console.error('Registration error:', error);
 
           // Handle network errors
           if (error.status === 0) {

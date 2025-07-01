@@ -1,16 +1,45 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private tokenKey = 'jwt_token';
 
-  constructor() { }
+  constructor() {}
 
-  // Store the JWT token
-  setToken(token: string): void {
-    localStorage.setItem(this.tokenKey, token);
+  // Store the JWT token with validation
+  setToken(token: string): boolean {
+    if (!token) {
+      return false;
+    }
+
+    // Validate token format
+    const tokenParts = token.split('.');
+    if (tokenParts.length !== 3) {
+      return false;
+    }
+
+    try {
+      // Validate payload can be parsed
+      const payload = JSON.parse(atob(tokenParts[1]));
+
+      // Check if user_id exists
+      if (!payload.user_id) {
+        return false;
+      }
+
+      // Check if token is not expired
+      if (payload.exp && payload.exp <= Math.floor(Date.now() / 1000)) {
+        return false;
+      }
+
+      // Store the token only if validation passes
+      localStorage.setItem(this.tokenKey, token);
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
   // Get the JWT token
@@ -44,7 +73,27 @@ export class AuthService {
   // Get the Authorization header for HTTP requests
   getAuthHeader(): { [key: string]: string } {
     const token = this.getToken();
-    return token ? { 'Authorization': `Bearer ${token}` } : {};
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  }
+
+  // Get user ID from JWT token (assumes token is already validated)
+  getUserId(): string | null {
+    const token = this.getToken();
+
+    if (!token) {
+      return null;
+    }
+
+    try {
+      // Since token was validated when stored, we can safely parse it
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.user_id || null;
+    } catch (error) {
+      // This should rarely happen since token was validated when stored
+      // Remove invalid token
+      this.removeToken();
+      return null;
+    }
   }
 
   // Logout user

@@ -1,0 +1,68 @@
+<div class="messages-wrapper">
+  <div class="messages-container">
+    <!-- Loading State -->
+    @if (isLoading) {
+    <div class="loading-container">
+      <div class="loading-spinner"></div>
+      <p>Loading messages...</p>
+    </div>
+    }
+
+    <!-- Error State -->
+    @if (errorMessage && !isLoading) {
+    <div class="error-container">
+      <h3>Error Loading Messages</h3>
+      <p>{{ errorMessage }}</p>
+      <button class="btn-primary" (click)="refreshMessages()">Try Again</button>
+    </div>
+    }
+
+    <!-- Messages List -->
+    @if (!isLoading && !errorMessage) {
+    <!-- Header with message count -->
+    <div class="messages-header">
+      <h2>Message History ({{ messages.length }})</h2>
+    </div>
+
+    @if (messages.length === 0) {
+    <div class="empty-state">
+      <h3>No Messages Yet</h3>
+      <p>
+        You haven't sent any messages yet. Get started by composing your first
+        SMS!
+      </p>
+      <button class="btn-primary" (click)="goToDashboard()">
+        Go to Dashboard
+      </button>
+    </div>
+    } @else {
+    <div class="messages-list">
+      @for (message of messages; track message.id) {
+      <div class="message-item">
+        <!-- Header with phone number and timestamp - outside rounded container -->
+        <div class="message-header">
+          <div class="phone-number">
+            <strong>{{ message.phone_number }}</strong>
+          </div>
+          <div class="message-timestamp">
+            {{ formatUTCDate(message.created_at) }}
+          </div>
+        </div>
+
+        <!-- Message body in rounded container -->
+        <div class="message-card">
+          <div class="message-content">
+            {{ message.body }}
+          </div>
+        </div>
+
+        <!-- Character count below the message container -->
+        <div class="message-footer">
+          <div class="character-count">{{ message.body.length }}/250</div>
+        </div>
+      </div>
+      }
+    </div>
+    } }
+  </div>
+</div>

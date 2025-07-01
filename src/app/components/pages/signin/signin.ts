@@ -70,27 +70,29 @@ export class SignInComponent {
       .subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          console.log('Sign-in response:', response);
 
           const token = response.token || response.jwt || response.access_token;
 
           if (token) {
-            // Store the JWT token
-            this.authService.setToken(token);
-            this.successMessage = 'Sign-in successful! Welcome back.';
+            // Store and validate the JWT token
+            const tokenValid = this.authService.setToken(token);
 
-            // Redirect to dashboard after successful sign-in
-            setTimeout(() => {
-              this.router.navigate(['/dashboard']);
-            }, 1500);
+            if (tokenValid) {
+              this.successMessage = 'Sign-in successful! Welcome back.';
+
+              // Redirect to dashboard after successful sign-in
+              setTimeout(() => {
+                this.router.navigate(['/dashboard']);
+              }, 1500);
+            } else {
+              this.errorMessage = 'Sign-in successful, but received an invalid authentication token. Please contact support.';
+            }
           } else {
-            this.errorMessage = 'Sign-in successful but no token received.';
-            console.warn('No token received in response:', response);
+            this.errorMessage = 'Sign-in successful but no authentication token received. Please contact support.';
           }
         },
         error: (error) => {
           this.isSubmitting = false;
-          console.error('Sign-in error:', error);
 
           // Handle different error scenarios
           if (error.status === 0) {

@@ -20,5 +20,12 @@ export const routes: Routes = [
         (m) => m.DashboardComponent
       ),
   },
+  {
+    path: 'messages',
+    loadComponent: () =>
+      import('./components/pages/messages/messages').then(
+        (m) => m.MessagesComponent
+      ),
+  },
   { path: '', redirectTo: '/signin', pathMatch: 'full' },
 ];

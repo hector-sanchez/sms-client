@@ -67,6 +67,10 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
     this.router.navigate(['/register']);
   }
 
+  goToMessages() {
+    this.router.navigate(['/messages']);
+  }
+
   logout() {
     this.authService.logout();
     this.router.navigate(['/signin']);

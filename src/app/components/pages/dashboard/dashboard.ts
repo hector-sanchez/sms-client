@@ -28,4 +28,8 @@ export class DashboardComponent implements OnInit {
     this.authService.logout();
     this.router.navigate(['/register']);
   }
+
+  goToMessages() {
+    this.router.navigate(['/messages']);
+  }
 }

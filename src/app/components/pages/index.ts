@@ -2,3 +2,4 @@
 export * from './register/register';
 export * from './signin/signin';
 export * from './dashboard/dashboard';
+export * from './messages/messages';
