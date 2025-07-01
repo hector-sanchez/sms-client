@@ -5,7 +5,8 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { AppConstants, getAuthHeader } from '../../../constants/app-constants';
 import { NewMessageComponent } from './components/new-message/new-message';
-import { MessagesListComponent, Message } from './components/messages-list/messages-list';
+import { MessagesListComponent } from './components/messages-list/messages-list';
+import { Message } from './components/message/message';
 
 @Component({
   selector: 'app-messages',

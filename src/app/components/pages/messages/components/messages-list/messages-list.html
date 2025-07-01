@@ -32,29 +32,7 @@
 } @else {
 <div class="messages-list">
   @for (message of messages; track message.id) {
-  <div class="message-item">
-    <!-- Header with phone number and timestamp - outside rounded container -->
-    <div class="message-header">
-      <div class="phone-number">
-        <strong>{{ message.phone_number }}</strong>
-      </div>
-      <div class="message-timestamp">
-        {{ formatUTCDate(message.created_at) }}
-      </div>
-    </div>
-
-    <!-- Message body in rounded container -->
-    <div class="message-card">
-      <div class="message-content">
-        {{ message.body }}
-      </div>
-    </div>
-
-    <!-- Character count below the message container -->
-    <div class="message-footer">
-      <div class="character-count">{{ message.body.length }}/{{ getMaxMessageLength() }}</div>
-    </div>
-  </div>
+    <app-message [message]="message"></app-message>
   }
 </div>
 } }
