@@ -8,13 +8,9 @@
       @if (isAuthenticated) {
       <div class="nav-items">
         <span class="welcome-text">Welcome back!</span>
-        <button class="nav-btn primary" (click)="goToDashboard()">
-          <span class="btn-icon">📊</span>
-          Dashboard
-        </button>
         <button class="nav-btn outline" (click)="goToMessages()">
           <span class="btn-icon">📱</span>
-          Messages
+          My Messages
         </button>
         <button class="nav-btn secondary" (click)="logout()">
           <span class="btn-icon">🚪</span>

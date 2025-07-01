@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
+import { AppConstants } from '../constants/app-constants';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private tokenKey = 'jwt_token';
+  private tokenKey = AppConstants.APP_SETTINGS.TOKEN_STORAGE_KEY;
 
   constructor() {}
 
@@ -73,7 +74,12 @@ export class AuthService {
   // Get the Authorization header for HTTP requests
   getAuthHeader(): { [key: string]: string } {
     const token = this.getToken();
-    return token ? { Authorization: `Bearer ${token}` } : {};
+    return token
+      ? {
+          [AppConstants.HTTP_HEADERS.AUTHORIZATION]: `${AppConstants.HTTP_HEADERS.BEARER_PREFIX} ${token}`,
+          [AppConstants.HTTP_HEADERS.CONTENT_TYPE]: AppConstants.HTTP_HEADERS.CONTENT_TYPE
+        }
+      : {};
   }
 
   // Get user ID from JWT token (assumes token is already validated)

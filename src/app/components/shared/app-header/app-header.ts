@@ -49,14 +49,14 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 
   goHome() {
     if (this.isAuthenticated) {
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/messages']);
     } else {
       this.router.navigate(['/signin']);
     }
   }
 
-  goToDashboard() {
-    this.router.navigate(['/dashboard']);
+  goToMessages() {
+    this.router.navigate(['/messages']);
   }
 
   goToSignIn() {
@@ -65,10 +65,6 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 
   goToRegister() {
     this.router.navigate(['/register']);
-  }
-
-  goToMessages() {
-    this.router.navigate(['/messages']);
   }
 
   logout() {

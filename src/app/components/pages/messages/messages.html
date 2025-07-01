@@ -28,12 +28,8 @@
     <div class="empty-state">
       <h3>No Messages Yet</h3>
       <p>
-        You haven't sent any messages yet. Get started by composing your first
-        SMS!
+        You haven't sent any messages yet. Start by sending your first SMS message!
       </p>
-      <button class="btn-primary" (click)="goToDashboard()">
-        Go to Dashboard
-      </button>
     </div>
     } @else {
     <div class="messages-list">
@@ -58,7 +54,7 @@
 
         <!-- Character count below the message container -->
         <div class="message-footer">
-          <div class="character-count">{{ message.body.length }}/250</div>
+          <div class="character-count">{{ message.body.length }}/{{ getMaxMessageLength() }}</div>
         </div>
       </div>
       }

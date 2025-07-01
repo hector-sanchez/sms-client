@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { AppConstants } from '../../../constants/app-constants';
 import {
   AuthFormComponent,
   AuthFormData,
@@ -55,8 +56,8 @@ export class RegisterComponent {
 
     // Set up headers for the request
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
+      'Content-Type': AppConstants.HTTP_HEADERS.CONTENT_TYPE,
+      Accept: AppConstants.HTTP_HEADERS.CONTENT_TYPE,
     });
 
     this.http
@@ -65,7 +66,7 @@ export class RegisterComponent {
         jwt?: string;
         access_token?: string;
         user?: any;
-      }>('http://localhost:3000/users', { email, password }, { headers })
+      }>(AppConstants.AUTH_ENDPOINTS.REGISTER, { email, password }, { headers })
       .subscribe({
         next: (response) => {
           this.isSubmitting = false;
@@ -78,11 +79,11 @@ export class RegisterComponent {
 
             if (tokenValid) {
               this.successMessage =
-                'Registration successful! You are now logged in.';
+                AppConstants.SUCCESS_MESSAGES.REGISTRATION_SUCCESS;
 
-              // Redirect to dashboard after successful registration and auto-login
+              // Redirect to messages after successful registration and auto-login
               setTimeout(() => {
-                this.router.navigate(['/dashboard']);
+                this.router.navigate([AppConstants.ROUTES.MESSAGES]);
               }, 2000);
             } else {
               this.errorMessage =

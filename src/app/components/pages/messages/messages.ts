@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { AppConstants, getAuthHeader } from '../../../constants/app-constants';
 
 export interface Message {
   id: number;
@@ -36,7 +37,7 @@ export class MessagesComponent implements OnInit {
   ngOnInit() {
     // Check if user is authenticated
     if (!this.authService.isAuthenticated()) {
-      this.router.navigate(['/signin']);
+      this.router.navigate([AppConstants.ROUTES.SIGNIN]);
       return;
     }
 
@@ -44,8 +45,7 @@ export class MessagesComponent implements OnInit {
     this.currentUserId = this.authService.getUserId();
 
     if (!this.currentUserId) {
-      this.errorMessage =
-        'Unable to get user ID from authentication token. Please sign in again.';
+      this.errorMessage = AppConstants.ERROR_MESSAGES.USER_ID_MISSING;
       this.isLoading = false;
       return;
     }
@@ -55,18 +55,15 @@ export class MessagesComponent implements OnInit {
 
   private loadMessages() {
     if (!this.currentUserId) {
-      this.errorMessage = 'User ID not available.';
+      this.errorMessage = AppConstants.ERROR_MESSAGES.USER_ID_MISSING;
       this.isLoading = false;
       return;
     }
 
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${this.authService.getToken()}`,
-    });
+    const headers = getAuthHeader(this.authService.getToken()!);
 
     this.http
-      .get<any>(`http://localhost:3000/users/${this.currentUserId}/messages`, {
+      .get<any>(AppConstants.USER_ENDPOINTS.MESSAGES(this.currentUserId), {
         headers,
       })
       .subscribe({
@@ -82,12 +79,12 @@ export class MessagesComponent implements OnInit {
             } else if (Array.isArray(response.data)) {
               messages = response.data;
             } else {
-              this.errorMessage = 'Invalid response format from server.';
+              this.errorMessage = AppConstants.ERROR_MESSAGES.GENERAL_ERROR;
               this.isLoading = false;
               return;
             }
           } else {
-            this.errorMessage = 'Invalid response format from server.';
+            this.errorMessage = AppConstants.ERROR_MESSAGES.GENERAL_ERROR;
             this.isLoading = false;
             return;
           }
@@ -104,15 +101,14 @@ export class MessagesComponent implements OnInit {
 
           if (error.status === 401) {
             this.authService.logout();
-            this.router.navigate(['/signin']);
+            this.router.navigate([AppConstants.ROUTES.SIGNIN]);
           } else if (error.status === 404) {
-            this.errorMessage = 'Messages not found for this user.';
+            this.errorMessage = AppConstants.ERROR_MESSAGES.MESSAGES_NOT_FOUND;
           } else if (error.status === 0) {
-            this.errorMessage =
-              'Network error: Please check if the server is running.';
+            this.errorMessage = AppConstants.ERROR_MESSAGES.NETWORK_ERROR;
           } else {
             this.errorMessage =
-              error.error?.message || 'Failed to load messages.';
+              error.error?.message || AppConstants.ERROR_MESSAGES.GENERAL_ERROR;
           }
         },
       });
@@ -201,8 +197,7 @@ export class MessagesComponent implements OnInit {
     this.currentUserId = this.authService.getUserId();
 
     if (!this.currentUserId) {
-      this.errorMessage =
-        'Unable to get user ID from authentication token. Please sign in again.';
+      this.errorMessage = AppConstants.ERROR_MESSAGES.USER_ID_MISSING;
       this.isLoading = false;
       return;
     }
@@ -210,7 +205,7 @@ export class MessagesComponent implements OnInit {
     this.loadMessages();
   }
 
-  goToDashboard() {
-    this.router.navigate(['/dashboard']);
+  getMaxMessageLength(): number {
+    return AppConstants.APP_SETTINGS.MAX_MESSAGE_LENGTH;
   }
 }

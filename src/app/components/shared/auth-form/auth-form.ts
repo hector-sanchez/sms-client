@@ -145,8 +145,4 @@ export class AuthFormComponent implements OnInit, OnChanges {
     this.router.navigate(['/signin']);
     this.checkAuthStatus(); // Refresh the auth status
   }
-
-  goToDashboard() {
-    this.router.navigate(['/dashboard']);
-  }
 }

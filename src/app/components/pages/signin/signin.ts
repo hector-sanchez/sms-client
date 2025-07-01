@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { AppConstants } from '../../../constants/app-constants';
 import {
   AuthFormComponent,
   AuthFormData,
@@ -55,8 +56,8 @@ export class SignInComponent {
 
     // Set up headers for the request
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
+      'Content-Type': AppConstants.HTTP_HEADERS.CONTENT_TYPE,
+      Accept: AppConstants.HTTP_HEADERS.CONTENT_TYPE,
     });
 
     // Assuming your Rails backend has a sign-in endpoint at /auth/signin or /sessions
@@ -66,7 +67,7 @@ export class SignInComponent {
         jwt?: string;
         access_token?: string;
         user?: any;
-      }>('http://localhost:3000/auths', { email, password }, { headers })
+      }>(AppConstants.AUTH_ENDPOINTS.LOGIN, { email, password }, { headers })
       .subscribe({
         next: (response) => {
           this.isSubmitting = false;
@@ -78,17 +79,19 @@ export class SignInComponent {
             const tokenValid = this.authService.setToken(token);
 
             if (tokenValid) {
-              this.successMessage = 'Sign-in successful! Welcome back.';
+              this.successMessage = AppConstants.SUCCESS_MESSAGES.LOGIN_SUCCESS;
 
-              // Redirect to dashboard after successful sign-in
+              // Redirect to messages after successful sign-in
               setTimeout(() => {
-                this.router.navigate(['/dashboard']);
+                this.router.navigate([AppConstants.ROUTES.MESSAGES]);
               }, 1500);
             } else {
-              this.errorMessage = 'Sign-in successful, but received an invalid authentication token. Please contact support.';
+              this.errorMessage =
+                'Sign-in successful, but received an invalid authentication token. Please contact support.';
             }
           } else {
-            this.errorMessage = 'Sign-in successful but no authentication token received. Please contact support.';
+            this.errorMessage =
+              'Sign-in successful but no authentication token received. Please contact support.';
           }
         },
         error: (error) => {
@@ -96,23 +99,23 @@ export class SignInComponent {
 
           // Handle different error scenarios
           if (error.status === 0) {
-            this.errorMessage =
-              'Network error: Please check if the server is running and CORS is configured properly.';
+            this.errorMessage = AppConstants.ERROR_MESSAGES.NETWORK_ERROR;
           } else if (error.status === 401) {
-            this.errorMessage = 'Invalid email or password. Please try again.';
+            this.errorMessage =
+              AppConstants.ERROR_MESSAGES.AUTHENTICATION_FAILED;
           } else if (error.status === 422) {
             this.errorMessage =
               error.error?.message ||
               'Validation error. Please check your input.';
           } else {
             this.errorMessage =
-              error.error?.message || 'Sign-in failed. Please try again.';
+              error.error?.message || AppConstants.ERROR_MESSAGES.GENERAL_ERROR;
           }
         },
       });
   }
 
   onSwitchToRegister() {
-    this.router.navigate(['/register']);
+    this.router.navigate([AppConstants.ROUTES.REGISTER]);
   }
 }
