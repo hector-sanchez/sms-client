@@ -16,20 +16,16 @@
           messageForm.get('phoneNumber')?.touched
         "
       />
-      <div
-        class="error-message"
-        *ngIf="
-          messageForm.get('phoneNumber')?.invalid &&
-          messageForm.get('phoneNumber')?.touched
-        "
-      >
-        <span *ngIf="messageForm.get('phoneNumber')?.errors?.['required']"
-          >Phone number is required</span
-        >
-        <span *ngIf="messageForm.get('phoneNumber')?.errors?.['pattern']"
-          >Please enter a valid phone number</span
-        >
+      @if (messageForm.get('phoneNumber')?.invalid && messageForm.get('phoneNumber')?.touched) {
+      <div class="error-message">
+        @if (messageForm.get('phoneNumber')?.errors?.['required']) {
+        <span>Phone number is required</span>
+        }
+        @if (messageForm.get('phoneNumber')?.errors?.['pattern']) {
+        <span>Please enter a valid phone number</span>
+        }
       </div>
+      }
     </div>
 
     <!-- Message Body Textarea -->
@@ -48,17 +44,13 @@
         "
         (input)="updateCharacterCount()"
       ></textarea>
-      <div
-        class="error-message"
-        *ngIf="
-          messageForm.get('messageBody')?.invalid &&
-          messageForm.get('messageBody')?.touched
-        "
-      >
-        <span *ngIf="messageForm.get('messageBody')?.errors?.['required']"
-          >Message is required</span
-        >
+      @if (messageForm.get('messageBody')?.invalid && messageForm.get('messageBody')?.touched) {
+      <div class="error-message">
+        @if (messageForm.get('messageBody')?.errors?.['required']) {
+        <span>Message is required</span>
+        }
       </div>
+      }
     </div>
 
     <!-- Character Counter -->
@@ -81,11 +73,15 @@
     </div>
 
     <!-- Success/Error Messages -->
-    <div class="form-message success" *ngIf="successMessage">
+    @if (successMessage) {
+    <div class="form-message success">
       {{ successMessage }}
     </div>
-    <div class="form-message error" *ngIf="formErrorMessage">
+    }
+    @if (formErrorMessage) {
+    <div class="form-message error">
       {{ formErrorMessage }}
     </div>
+    }
   </form>
 </div>

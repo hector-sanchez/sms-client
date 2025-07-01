@@ -5,21 +5,12 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { AppConstants, getAuthHeader } from '../../../constants/app-constants';
 import { NewMessageComponent } from './components/new-message/new-message';
-
-export interface Message {
-  id: number;
-  body: string;
-  phone_number: string;
-  status: 'pending' | 'sent' | 'delivered' | 'failed';
-  created_at: string;
-  updated_at: string;
-  user_id: number;
-}
+import { MessagesListComponent, Message } from './components/messages-list/messages-list';
 
 @Component({
   selector: 'app-messages',
   standalone: true,
-  imports: [CommonModule, NewMessageComponent],
+  imports: [CommonModule, NewMessageComponent, MessagesListComponent],
   templateUrl: './messages.html',
   styleUrl: './messages.css',
 })
@@ -115,81 +106,6 @@ export class MessagesComponent implements OnInit {
       });
   }
 
-  getStatusColor(status: string): string {
-    switch (status) {
-      case 'sent':
-        return '#10b981'; // green
-      case 'delivered':
-        return '#3b82f6'; // blue
-      case 'pending':
-        return '#f59e0b'; // amber
-      case 'failed':
-        return '#ef4444'; // red
-      default:
-        return '#6b7280'; // gray
-    }
-  }
-
-  getStatusIcon(status: string): string {
-    switch (status) {
-      case 'sent':
-        return '✓';
-      case 'delivered':
-        return '✓✓';
-      case 'pending':
-        return '⏳';
-      case 'failed':
-        return '✗';
-      default:
-        return '?';
-    }
-  }
-
-  formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
-
-    if (diffInHours < 24) {
-      return date.toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-    } else if (diffInHours < 168) {
-      // 7 days
-      return date.toLocaleDateString([], {
-        weekday: 'short',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-    } else {
-      return date.toLocaleDateString([], {
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-    }
-  }
-  formatUTCDate(dateString: string): string {
-    const date = new Date(dateString);
-
-    // Format date part as full date
-    const fullDate = date.toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-
-    // Format time part as UTC
-    const utcHours = String(date.getUTCHours()).padStart(2, '0');
-    const utcMinutes = String(date.getUTCMinutes()).padStart(2, '0');
-    const utcTime = `${utcHours}:${utcMinutes} UTC`;
-
-    return `${fullDate} ${utcTime}`;
-  }
-
   refreshMessages() {
     this.isLoading = true;
     this.errorMessage = '';
@@ -206,13 +122,14 @@ export class MessagesComponent implements OnInit {
     this.loadMessages();
   }
 
-  getMaxMessageLength(): number {
-    return AppConstants.APP_SETTINGS.MAX_MESSAGE_LENGTH;
-  }
-
   // Handler for when a message is sent from the new-message component
   onMessageSent(): void {
     // Refresh messages to show the new message
     this.loadMessages();
+  }
+
+  // Handler for when the messages-list component requests a refresh
+  onRefreshRequested(): void {
+    this.refreshMessages();
   }
 }
