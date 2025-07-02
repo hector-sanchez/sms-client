@@ -10,6 +10,9 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
+  "vercel": {
+    "outputDirectory": "dist/sms-client/browser"
+  },
   "prettier": {
     "overrides": [
       {
