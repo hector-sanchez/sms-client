@@ -144,6 +144,20 @@ Update `src/app/constants/app-constants.ts` to configure:
 - **Production**: `npm run build` - Optimized production build
 - **Watch Mode**: `npm run watch` - Build with file watching
 
+## ⚡ Quick Deploy (2 Minutes)
+
+**Want to deploy right now?** Here's the fastest way:
+
+1. **Push your code to GitHub** (if not already done)
+2. **Go to [vercel.com](https://vercel.com)** and sign up with GitHub
+3. **Click "New Project"** and import your repository
+4. **Click "Deploy"** (no configuration needed!)
+5. **🎉 Your app is live!** You'll get a URL like `https://sms-client-yourname.vercel.app`
+
+> **Note**: Update the API URL in `src/app/constants/app-constants.ts` before deploying to connect to your production backend.
+
+[📖 See detailed deployment instructions below](#-deployment)
+
 ## 🎨 UI/UX Features
 
 ### Design Principles
@@ -281,3 +295,207 @@ For support and questions:
 ---
 
 Built with ❤️ using Angular 20
+
+## 🚀 Deployment
+
+### Pre-Deployment Checklist ✅
+
+Before deploying, make sure you have:
+
+1. **✅ Code in a Git repository** (GitHub, GitLab, etc.)
+2. **✅ Updated API URL** in `src/app/constants/app-constants.ts`:
+   ```typescript
+   static readonly API_BASE_URL = 'https://your-production-api.com';
+   ```
+3. **✅ Tested the build** locally:
+   ```bash
+   npm run build:prod
+   ```
+4. **✅ Backend API deployed** and accessible from your domain
+
+### Deployment Options
+
+This application can be easily deployed to several beginner-friendly hosting platforms. Here are step-by-step instructions for the most popular options:
+
+### Option 1: Vercel (Recommended)
+
+[Vercel](https://vercel.com) is perfect for Angular applications and offers excellent performance with global CDN.
+
+#### Prerequisites
+- GitHub account
+- Code pushed to a GitHub repository
+
+#### Steps:
+
+1. **Sign up for Vercel**
+   - Go to [vercel.com](https://vercel.com)
+   - Sign up using your GitHub account
+
+2. **Import your project**
+   - Click "New Project"
+   - Import your GitHub repository
+   - Vercel will automatically detect it's an Angular app
+
+3. **Configure deployment**
+   - Framework Preset: Angular
+   - Build Command: `npm run build` (auto-detected)
+   - Output Directory: `dist/sms-client` (auto-detected)
+   - Install Command: `npm install` (auto-detected)
+
+4. **Deploy**
+   - Click "Deploy"
+   - Wait for the build to complete
+   - Your app will be live at `https://your-app-name.vercel.app`
+
+5. **Environment Variables (if needed)**
+   - Go to your project dashboard
+   - Navigate to Settings → Environment Variables
+   - Add any production environment variables
+
+#### Automatic Deployments
+- Every push to your main branch will automatically trigger a new deployment
+- Pull requests get preview deployments
+
+### Option 2: Netlify
+
+[Netlify](https://netlify.com) is another excellent choice with drag-and-drop deployment options.
+
+#### Method A: Git-based Deployment (Recommended)
+
+1. **Sign up for Netlify**
+   - Go to [netlify.com](https://netlify.com)
+   - Sign up using your GitHub account
+
+2. **New site from Git**
+   - Click "New site from Git"
+   - Choose GitHub and authorize Netlify
+   - Select your repository
+
+3. **Configure build settings**
+   - Build command: `npm run build`
+   - Publish directory: `dist/sms-client`
+   - Click "Deploy site"
+
+4. **Custom domain (optional)**
+   - Go to Site settings → Domain management
+   - Change site name or add custom domain
+
+#### Method B: Manual Deployment
+
+1. **Build your app locally**
+   ```bash
+   npm run build:prod
+   ```
+
+2. **Deploy to Netlify**
+   - Go to [netlify.com](https://netlify.com)
+   - Drag and drop the `dist/sms-client` folder to the deploy area
+   - Your site will be live immediately
+
+### Option 3: GitHub Pages
+
+Free hosting directly from your GitHub repository.
+
+1. **Build for GitHub Pages**
+   ```bash
+   npm install -g angular-cli-ghpages
+   npm run build:prod
+   npx angular-cli-ghpages --dir=dist/sms-client
+   ```
+
+2. **Enable GitHub Pages**
+   - Go to your repository → Settings → Pages
+   - Select source: Deploy from a branch
+   - Branch: `gh-pages`
+   - Your app will be available at `https://yourusername.github.io/sms-client`
+
+### Option 4: Firebase Hosting
+
+Google's hosting platform with excellent performance.
+
+1. **Install Firebase CLI**
+   ```bash
+   npm install -g firebase-tools
+   ```
+
+2. **Login and initialize**
+   ```bash
+   firebase login
+   firebase init hosting
+   ```
+
+3. **Configure Firebase**
+   - Select "Use an existing project" or create new
+   - Public directory: `dist/sms-client`
+   - Single-page app: Yes
+   - Overwrite index.html: No
+
+4. **Build and deploy**
+   ```bash
+   npm run build:prod
+   firebase deploy
+   ```
+
+### Important Notes for Production
+
+#### API Configuration
+Before deploying, you may need to update the API endpoints in `src/app/constants/app-constants.ts`:
+
+```typescript
+// For production, update the API_BASE_URL
+static readonly API_BASE_URL = 'https://your-production-api.com';
+```
+
+#### Environment-specific Builds
+Create different configurations for different environments by updating `angular.json`:
+
+```json
+"configurations": {
+  "production": {
+    "fileReplacements": [
+      {
+        "replace": "src/environments/environment.ts",
+        "with": "src/environments/environment.prod.ts"
+      }
+    ]
+  }
+}
+```
+
+#### Performance Optimizations
+The production build automatically includes:
+- ✅ Minification and compression
+- ✅ Tree shaking (removing unused code)
+- ✅ Ahead-of-Time (AOT) compilation
+- ✅ Bundle optimization
+
+#### SSL/HTTPS
+All recommended platforms provide free SSL certificates automatically.
+
+### Troubleshooting Deployment
+
+**Build Fails:**
+- Check that all dependencies are in `package.json`
+- Verify Angular version compatibility
+- Check for TypeScript errors locally
+
+**404 Errors on Refresh:**
+- Ensure routing configuration is correct (already configured in `vercel.json` and `netlify.toml`)
+- For other platforms, configure server to redirect all routes to `index.html`
+
+**API Connection Issues:**
+- Update API endpoints for production
+- Check CORS settings on your backend
+- Verify environment variables are set correctly
+
+### Quick Start (Vercel - Easiest)
+
+If you want to deploy right now:
+
+1. Push your code to GitHub (if not already done)
+2. Go to [vercel.com](https://vercel.com) and sign up with GitHub
+3. Click "New Project" and import your repository
+4. Click "Deploy"
+5. Your app will be live in under 2 minutes! 🎉
+
+Your live URL will be something like: `https://sms-client-username.vercel.app`
