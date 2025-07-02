@@ -99,6 +99,8 @@ export class MessagesComponent implements OnInit {
             this.errorMessage = AppConstants.ERROR_MESSAGES.MESSAGES_NOT_FOUND;
           } else if (error.status === 0) {
             this.errorMessage = AppConstants.ERROR_MESSAGES.NETWORK_ERROR;
+          } else if (error.status >= 500) {
+            this.errorMessage = 'Server error. Please try again later.';
           } else {
             this.errorMessage =
               error.error?.message || AppConstants.ERROR_MESSAGES.GENERAL_ERROR;

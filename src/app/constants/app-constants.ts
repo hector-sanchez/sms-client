@@ -7,7 +7,8 @@
 
 export class AppConstants {
   // API Base Configuration
-  static readonly API_BASE_URL = 'http://localhost:3000';
+  static readonly API_BASE_URL =
+    'https://sms-api-1751415465-612b91c224a7.herokuapp.com';
 
   // Authentication Endpoints
   static readonly AUTH_ENDPOINTS = {
@@ -23,11 +24,22 @@ export class AppConstants {
       `${this.API_BASE_URL}/users/${userId}/messages`,
   } as const;
 
+  // Message Endpoints
+  static readonly MESSAGE_ENDPOINTS = {
+    SEND: `${this.API_BASE_URL}/messages`,
+  } as const;
+
   // Application Settings
   static readonly APP_SETTINGS = {
     MAX_MESSAGE_LENGTH: 250,
     TOKEN_STORAGE_KEY: 'jwt_token',
     SESSION_TIMEOUT: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
+    DEFAULT_PHONE_NUMBER: '+18777804236',
+  } as const;
+
+  // Form Validation Patterns
+  static readonly VALIDATION_PATTERNS = {
+    PHONE_NUMBER: /^\+?[1-9]\d{1,14}$/, // Basic international phone number pattern
   } as const;
 
   // HTTP Headers
@@ -49,7 +61,8 @@ export class AppConstants {
   static readonly ERROR_MESSAGES = {
     AUTHENTICATION_FAILED:
       'Authentication failed. Please check your credentials.',
-    NETWORK_ERROR: 'Network error: Please check if the server is running.',
+    NETWORK_ERROR: 'Network error: Please check your internet connection and ensure the API server is accessible.',
+    CORS_ERROR: 'CORS error: The API server may not be configured to accept requests from this domain.',
     INVALID_TOKEN: 'Invalid authentication token. Please sign in again.',
     MESSAGES_NOT_FOUND: 'Messages not found for this user.',
     GENERAL_ERROR: 'An unexpected error occurred. Please try again.',

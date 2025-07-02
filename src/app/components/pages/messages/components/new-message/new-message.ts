@@ -40,10 +40,10 @@ export class NewMessageComponent {
     // Initialize the form
     this.messageForm = this.formBuilder.group({
       phoneNumber: [
-        '',
+        AppConstants.APP_SETTINGS.DEFAULT_PHONE_NUMBER,
         [
           Validators.required,
-          Validators.pattern(/^\+?[1-9]\d{1,14}$/), // Basic international phone number pattern
+          Validators.pattern(AppConstants.VALIDATION_PATTERNS.PHONE_NUMBER),
         ],
       ],
       messageBody: [
@@ -66,7 +66,10 @@ export class NewMessageComponent {
   }
 
   clearForm(): void {
-    this.messageForm.reset();
+    this.messageForm.reset({
+      phoneNumber: AppConstants.APP_SETTINGS.DEFAULT_PHONE_NUMBER,
+      messageBody: '',
+    });
     this.characterCount = 0;
     this.successMessage = '';
     this.formErrorMessage = '';
@@ -90,7 +93,7 @@ export class NewMessageComponent {
     const headers = getAuthHeader(this.authService.getToken()!);
 
     this.http
-      .post<any>('http://localhost:3000/messages', messageData, { headers })
+      .post<any>(AppConstants.MESSAGE_ENDPOINTS.SEND, messageData, { headers })
       .subscribe({
         next: (response) => {
           this.isSubmitting = false;
@@ -107,11 +110,18 @@ export class NewMessageComponent {
             this.authService.logout();
             this.router.navigate([AppConstants.ROUTES.SIGNIN]);
           } else if (error.status === 0) {
+            // Network error or CORS issue
             this.formErrorMessage = AppConstants.ERROR_MESSAGES.NETWORK_ERROR;
+            console.error('Network/CORS Error:', error);
+          } else if (error.status === 404) {
+            this.formErrorMessage = 'API endpoint not found. Please contact support.';
+          } else if (error.status >= 500) {
+            this.formErrorMessage = 'Server error. Please try again later.';
           } else {
             this.formErrorMessage =
               error.error?.message || AppConstants.ERROR_MESSAGES.GENERAL_ERROR;
           }
+          console.error('API Error:', error);
         },
       });
   }
