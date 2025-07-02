@@ -1,7 +1,15 @@
 {
   "version": 2,
-  "buildCommand": "npm run build:prod",
-  "outputDirectory": "dist/sms-client/browser",
+  "builds": [
+    {
+      "src": "./package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "buildCommand": "npm run build:prod",
+        "outputDirectory": "dist/sms-client/browser"
+      }
+    }
+  ],
   "routes": [
     {
       "src": "/(.*)",
