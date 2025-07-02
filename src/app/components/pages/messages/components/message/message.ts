@@ -5,7 +5,7 @@ export interface Message {
   id: number;
   body: string;
   phone_number: string;
-  status: 'pending' | 'sent' | 'delivered' | 'failed';
+  status: 'failed' | 'queued' | 'sent' | 'delivered' | 'pending';
   created_at: string;
   updated_at: string;
   user_id: number;
@@ -47,11 +47,11 @@ export class MessageComponent {
   getStatusColor(status: string): string {
     switch (status) {
       case 'sent':
-        return '#10b981'; // green
       case 'delivered':
-        return '#3b82f6'; // blue
+      case 'queued':
+        return '#10b981'; // green for all successful statuses
       case 'pending':
-        return '#f59e0b'; // amber
+        return '#f59e0b'; // amber for pending
       case 'failed':
         return '#ef4444'; // red
       default:
@@ -62,13 +62,13 @@ export class MessageComponent {
   getStatusIcon(status: string): string {
     switch (status) {
       case 'sent':
-        return '✓';
       case 'delivered':
-        return '✓✓';
+      case 'queued':
+        return '✓✓'; // Double checkmark for all successful statuses
       case 'pending':
-        return '⏳';
+        return '⏳'; // Hourglass for pending
       case 'failed':
-        return '✗';
+        return '⚠'; // Warning triangle for failed
       default:
         return '?';
     }

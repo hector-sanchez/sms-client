@@ -43,11 +43,32 @@
 }
 
 .message-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.message-text {
   color: #333;
   font-size: 15px;
   line-height: 1.6;
   word-wrap: break-word;
   margin: 0;
+  flex: 1;
+}
+
+.status-icon {
+  font-size: 14px;
+  font-weight: bold;
+  flex-shrink: 0;
+  margin-top: 2px;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.status-icon:hover {
+  opacity: 1;
 }
 
 .message-footer {
@@ -83,7 +104,11 @@
 }
 
 @media (max-width: 480px) {
-  .message-content {
+  .message-text {
     font-size: 13px;
+  }
+
+  .status-icon {
+    font-size: 12px;
   }
 }

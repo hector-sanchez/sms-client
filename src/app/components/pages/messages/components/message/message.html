@@ -12,7 +12,12 @@
   <!-- Message body in rounded container -->
   <div class="message-card">
     <div class="message-content">
-      {{ message.body }}
+      <div class="message-text">
+        {{ message.body }}
+      </div>
+      <div class="status-icon" [style.color]="getStatusColor(message.status)">
+        {{ getStatusIcon(message.status) }}
+      </div>
     </div>
   </div>
 
