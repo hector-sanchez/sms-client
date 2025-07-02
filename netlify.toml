@@ -1,7 +1,7 @@
 # Netlify build configuration
 [build]
-  publish = "dist/sms-client"
-  command = "npm run build"
+  publish = "dist/sms-client/browser"
+  command = "npm run build:prod"
 
 # Redirect all routes to index.html for Angular routing
 [[redirects]]
