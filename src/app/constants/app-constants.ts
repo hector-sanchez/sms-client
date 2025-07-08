@@ -7,8 +7,8 @@
 
 export class AppConstants {
   // API Base Configuration
-  static readonly API_BASE_URL =
-    'https://sms-api-1751415465-612b91c224a7.herokuapp.com';
+  static readonly API_BASE_URL = 'http://localhost:3000';
+  // 'https://sms-api-1751415465-612b91c224a7.herokuapp.com';
 
   // Authentication Endpoints
   static readonly AUTH_ENDPOINTS = {
@@ -61,8 +61,10 @@ export class AppConstants {
   static readonly ERROR_MESSAGES = {
     AUTHENTICATION_FAILED:
       'Authentication failed. Please check your credentials.',
-    NETWORK_ERROR: 'Network error: Please check your internet connection and ensure the API server is accessible.',
-    CORS_ERROR: 'CORS error: The API server may not be configured to accept requests from this domain.',
+    NETWORK_ERROR:
+      'Network error: Please check your internet connection and ensure the API server is accessible.',
+    CORS_ERROR:
+      'CORS error: The API server may not be configured to accept requests from this domain.',
     INVALID_TOKEN: 'Invalid authentication token. Please sign in again.',
     MESSAGES_NOT_FOUND: 'Messages not found for this user.',
     GENERAL_ERROR: 'An unexpected error occurred. Please try again.',
