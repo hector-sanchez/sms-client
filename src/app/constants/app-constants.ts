@@ -7,8 +7,9 @@
 
 export class AppConstants {
   // API Base Configuration
-  static readonly API_BASE_URL = 'http://localhost:3000';
-  // 'https://sms-api-1751415465-612b91c224a7.herokuapp.com';
+  static readonly API_BASE_URL =
+    'https://sms-api-production-1605.up.railway.app';
+  // 'http://localhost:3000'; // Use for local development
 
   // Authentication Endpoints
   static readonly AUTH_ENDPOINTS = {
